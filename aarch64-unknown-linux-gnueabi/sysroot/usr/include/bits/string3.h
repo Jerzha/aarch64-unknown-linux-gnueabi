@@ -1,4 +1,4 @@
-/* Copyright (C) 2004-2015 Free Software Foundation, Inc.
+/* Copyright (C) 2004-2017 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
 
    The GNU C Library is free software; you can redistribute it and/or
@@ -91,16 +91,15 @@ __NTH (memset (void *__dest, int __ch, size_t __len))
 }
 
 #ifdef __USE_MISC
-__fortify_function void
-__NTH (bcopy (const void *__src, void *__dest, size_t __len))
-{
-  (void) __builtin___memmove_chk (__dest, __src, __len, __bos0 (__dest));
-}
+# include <bits/strings_fortified.h>
+
+void __explicit_bzero_chk (void *__dest, size_t __len, size_t __destlen)
+  __THROW __nonnull ((1));
 
 __fortify_function void
-__NTH (bzero (void *__dest, size_t __len))
+__NTH (explicit_bzero (void *__dest, size_t __len))
 {
-  (void) __builtin___memset_chk (__dest, '\0', __len, __bos0 (__dest));
+  __explicit_bzero_chk (__dest, __len, __bos0 (__dest));
 }
 #endif
 
@@ -126,7 +125,7 @@ __NTH (strncpy (char *__restrict __dest, const char *__restrict __src,
   return __builtin___strncpy_chk (__dest, __src, __len, __bos (__dest));
 }
 
-// XXX We have no corresponding builtin yet.
+/* XXX We have no corresponding builtin yet.  */
 extern char *__stpncpy_chk (char *__dest, const char *__src, size_t __n,
 			    size_t __destlen) __THROW;
 extern char *__REDIRECT_NTH (__stpncpy_alias, (char *__dest, const char *__src,
@@ -136,7 +135,7 @@ __fortify_function char *
 __NTH (stpncpy (char *__dest, const char *__src, size_t __n))
 {
   if (__bos (__dest) != (size_t) -1
-      && (!__builtin_constant_p (__n) || __n <= __bos (__dest)))
+      && (!__builtin_constant_p (__n) || __n > __bos (__dest)))
     return __stpncpy_chk (__dest, __src, __n, __bos (__dest));
   return __stpncpy_alias (__dest, __src, __n);
 }

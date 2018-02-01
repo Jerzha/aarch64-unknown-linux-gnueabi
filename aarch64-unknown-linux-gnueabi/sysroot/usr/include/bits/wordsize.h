@@ -1,4 +1,6 @@
-/* Copyright (C) 1999-2015 Free Software Foundation, Inc.
+/* Determine the wordsize from the preprocessor defines.
+
+   Copyright (C) 2016-2017 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
 
    The GNU C Library is free software; you can redistribute it and/or
@@ -15,4 +17,12 @@
    License along with the GNU C Library; if not, see
    <http://www.gnu.org/licenses/>.  */
 
-#define __WORDSIZE	64
+#ifdef __LP64__
+# define __WORDSIZE			64
+#else
+# define __WORDSIZE			32
+# define __WORDSIZE32_SIZE_ULONG	1
+# define __WORDSIZE32_PTRDIFF_LONG	1
+#endif
+
+#define __WORDSIZE_TIME64_COMPAT32	0
