@@ -123,6 +123,7 @@
 #define SYS_mkdirat __NR_mkdirat
 #define SYS_mknodat __NR_mknodat
 #define SYS_mlock __NR_mlock
+#define SYS_mlock2 __NR_mlock2
 #define SYS_mlockall __NR_mlockall
 #define SYS_mmap __NR_mmap
 #define SYS_mount __NR_mount
@@ -395,6 +396,7 @@
 #define SYS_mkdirat __NR_mkdirat
 #define SYS_mknodat __NR_mknodat
 #define SYS_mlock __NR_mlock
+#define SYS_mlock2 __NR_mlock2
 #define SYS_mlockall __NR_mlockall
 #define SYS_mmap __NR_mmap
 #define SYS_mount __NR_mount

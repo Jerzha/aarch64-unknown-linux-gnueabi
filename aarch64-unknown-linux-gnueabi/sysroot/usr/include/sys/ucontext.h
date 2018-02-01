@@ -1,4 +1,4 @@
-/* Copyright (C) 1998-2015 Free Software Foundation, Inc.
+/* Copyright (C) 1998-2017 Free Software Foundation, Inc.
 
    This file is part of the GNU C Library.
 
@@ -23,11 +23,14 @@
 
 #include <features.h>
 #include <signal.h>
+
+/* We need the signal context definitions even if they are not exposed
+   by <signal.h>.  */
+#include <bits/sigcontext.h>
+#include <bits/sigstack.h>
+
 #include <sys/procfs.h>
 
-/* We need the signal context definitions even if they are not used
-   included in <signal.h>.  */
-#include <bits/sigcontext.h>
 
 typedef elf_greg_t greg_t;
 

@@ -1,4 +1,4 @@
-/* Copyright (C) 1991-2015 Free Software Foundation, Inc.
+/* Copyright (C) 1991-2017 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
 
    The GNU C Library is free software; you can redistribute it and/or
@@ -71,8 +71,7 @@ typedef __uid_t uid_t;
 
 #ifdef __USE_POSIX199309
 /* We need `struct timespec' later on.  */
-# define __need_timespec
-# include <time.h>
+# include <bits/types/struct_timespec.h>
 #endif
 
 #if defined __USE_POSIX199309 || defined __USE_XOPEN_EXTENDED

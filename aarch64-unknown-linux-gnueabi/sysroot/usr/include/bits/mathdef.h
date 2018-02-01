@@ -1,5 +1,4 @@
-/* Copyright (C) 1999-2015 Free Software Foundation, Inc.
-
+/* Copyright (C) 1997-2017 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
 
    The GNU C Library is free software; you can redistribute it and/or
@@ -16,24 +15,6 @@
    License along with the GNU C Library; if not, see
    <http://www.gnu.org/licenses/>.  */
 
-#if !defined _MATH_H && !defined _COMPLEX_H
-# error "Never use <bits/mathdef.h> directly; include <math.h> instead"
+#ifndef _COMPLEX_H
+# error "Never use <bits/mathdef.h> directly; include <complex.h> instead"
 #endif
-
-#if defined  __USE_ISOC99 && defined _MATH_H && !defined _MATH_H_MATHDEF
-# define _MATH_H_MATHDEF	1
-
-/* GCC does not promote `float' values to `double'.  */
-typedef float float_t;		/* `float' expressions are evaluated as
-				   `float'.  */
-typedef double double_t;	/* `double' expressions are evaluated as
-				   `double'.  */
-
-/* The values returned by `ilogb' for 0 and NaN respectively.  */
-# define FP_ILOGB0	(-2147483647)
-# define FP_ILOGBNAN	(2147483647)
-
-# define FP_FAST_FMA 1
-# define FP_FAST_FMAF 1
-
-#endif	/* ISO C99 */

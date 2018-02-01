@@ -1,4 +1,4 @@
-/* Copyright (C) 1991-2015 Free Software Foundation, Inc.
+/* Copyright (C) 1991-2017 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
 
    The GNU C Library is free software; you can redistribute it and/or
@@ -25,12 +25,20 @@
    kernel then we will not define the IPv6 IPPROTO_* defines, in6_addr (nor the
    defines), sockaddr_in6, or ipv6_mreq. Same for in6_ptkinfo or ip6_mtuinfo
    in linux/ipv6.h. The ABI used by the linux-kernel and glibc match exactly.
-   Neither the linux kernel nor glibc should break this ABI without coordination.  */
-#if defined _UAPI_LINUX_IN6_H || defined _UAPI_IPV6_H
+   Neither the linux kernel nor glibc should break this ABI without coordination.
+   In upstream kernel 56c176c9 the _UAPI prefix was stripped so we need to check
+   for _LINUX_IN6_H and _IPV6_H now, and keep checking the old versions for
+   maximum backwards compatibility.  */
+#if defined _UAPI_LINUX_IN6_H \
+    || defined _UAPI_IPV6_H \
+    || defined _LINUX_IN6_H \
+    || defined _IPV6_H
 /* This is not quite the same API since the kernel always defines s6_addr16 and
    s6_addr32. This is not a violation of POSIX since POSIX says "at least the
    following member" and that holds true.  */
-# define __USE_KERNEL_IPV6_DEFS
+# define __USE_KERNEL_IPV6_DEFS 1
+#else
+# define __USE_KERNEL_IPV6_DEFS 0
 #endif
 
 /* Options for use with `getsockopt' and `setsockopt' at the IP level.
@@ -45,8 +53,8 @@
 #define        IP_RECVRETOPTS  IP_RETOPTS       /* bool; Receive IP options for response.  */
 #define        IP_RETOPTS      7       /* ip_opts; Set/get IP per-packet options.  */
 #define IP_MULTICAST_IF 32	/* in_addr; set/get IP multicast i/f */
-#define IP_MULTICAST_TTL 33	/* u_char; set/get IP multicast ttl */
-#define IP_MULTICAST_LOOP 34	/* i_char; set/get IP multicast loopback */
+#define IP_MULTICAST_TTL 33	/* unsigned char; set/get IP multicast ttl */
+#define IP_MULTICAST_LOOP 34	/* bool; set/get IP multicast loopback */
 #define IP_ADD_MEMBERSHIP 35	/* ip_mreq; add an IP group membership */
 #define IP_DROP_MEMBERSHIP 36	/* ip_mreq; drop an IP group membership */
 #define IP_UNBLOCK_SOURCE 37	/* ip_mreq_source: unblock data from source */
@@ -92,6 +100,7 @@
 #define IP_MINTTL       21
 #define IP_NODEFRAG     22
 #define IP_CHECKSUM     23
+#define IP_BIND_ADDRESS_NO_PORT 24
 
 /* IP_MTU_DISCOVER arguments.  */
 #define IP_PMTUDISC_DONT   0	/* Never send DF frames.  */
@@ -183,6 +192,7 @@ struct in_pktinfo
 #define IPV6_LEAVE_ANYCAST	28
 #define IPV6_IPSEC_POLICY	34
 #define IPV6_XFRM_POLICY	35
+#define IPV6_HDRINCL		36
 
 /* Advanced API (RFC3542) (1).  */
 #define IPV6_RECVPKTINFO	49
@@ -205,8 +215,10 @@ struct in_pktinfo
 #define IPV6_TCLASS		67
 
 /* Obsolete synonyms for the above.  */
-#define IPV6_ADD_MEMBERSHIP	IPV6_JOIN_GROUP
-#define IPV6_DROP_MEMBERSHIP	IPV6_LEAVE_GROUP
+#if !__USE_KERNEL_IPV6_DEFS
+# define IPV6_ADD_MEMBERSHIP	IPV6_JOIN_GROUP
+# define IPV6_DROP_MEMBERSHIP	IPV6_LEAVE_GROUP
+#endif
 #define IPV6_RXHOPOPTS		IPV6_HOPOPTS
 #define IPV6_RXDSTOPTS		IPV6_DSTOPTS
 

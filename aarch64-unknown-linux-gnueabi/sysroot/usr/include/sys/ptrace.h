@@ -1,5 +1,5 @@
 /* `ptrace' debugger support interface.  Linux version.
-   Copyright (C) 1996-2015 Free Software Foundation, Inc.
+   Copyright (C) 1996-2017 Free Software Foundation, Inc.
 
    This file is part of the GNU C Library.
 
@@ -127,8 +127,17 @@ enum __ptrace_request
   PTRACE_LISTEN = 0x4208,
 #define PTRACE_LISTEN PTRACE_LISTEN
 
-  PTRACE_PEEKSIGINFO = 0x4209
+  PTRACE_PEEKSIGINFO = 0x4209,
 #define PTRACE_PEEKSIGINFO PTRACE_PEEKSIGINFO
+
+  PTRACE_GETSIGMASK = 0x420a,
+#define PTRACE_GETSIGMASK PTRACE_GETSIGMASK
+
+  PTRACE_SETSIGMASK = 0x420b,
+#define PTRACE_SETSIGMASK PTRACE_SETSIGMASK
+
+  PTRACE_SECCOMP_GET_FILTER = 0x420c
+#define PTRACE_SECCOMP_GET_FILTER PTRACE_SECCOMP_GET_FILTER
 };
 
 
@@ -149,7 +158,9 @@ enum __ptrace_setoptions
   PTRACE_O_TRACEVFORKDONE = 0x00000020,
   PTRACE_O_TRACEEXIT	= 0x00000040,
   PTRACE_O_TRACESECCOMP = 0x00000080,
-  PTRACE_O_MASK		= 0x000000ff
+  PTRACE_O_EXITKILL	= 0x00100000,
+  PTRACE_O_SUSPEND_SECCOMP	= 0x00200000,
+  PTRACE_O_MASK		= 0x003000ff
 };
 
 /* Wait extended result codes for the above trace options.  */
